@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export function PhoneShell({
@@ -30,8 +31,8 @@ export function PhoneShell({
                 ‹
               </button>
             ) : (
-              <div className="w-9 h-9 rounded-full bg-white/15 flex items-center justify-center text-lg font-bold">
-                KK
+              <div className="w-9 h-9 rounded-full bg-white overflow-hidden flex items-center justify-center">
+                <Image src="/logo.jpg" alt="KKU Fair-Rent Logo" width={36} height={36} className="object-cover" />
               </div>
             )}
             <div className="flex-1 min-w-0">
