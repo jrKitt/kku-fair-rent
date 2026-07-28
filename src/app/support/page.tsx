@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { User, Send } from "lucide-react";
 import PhoneShell from "@/components/PhoneShell";
 
 // ปุ่ม 5: สอบถามพี่หอ (Q&A / Peer Support)
@@ -35,7 +36,7 @@ export default function SupportPage() {
   const [msgs, setMsgs] = useState<Msg[]>([
     {
       from: "senior",
-      text: "สวัสดีจ้าน้องปี 1 🙌 พี่หออาสาตอบทุกเรื่องหอพักเลย ถามมาได้เลยว่าอยากรู้อะไร",
+      text: "สวัสดีจ้าน้องปี 1 พี่หออาสาตอบทุกเรื่องหอพักเลย ถามมาได้เลยว่าอยากรู้อะไร",
     },
   ]);
   const [text, setText] = useState("");
@@ -65,8 +66,8 @@ export default function SupportPage() {
               className={`flex ${m.from === "me" ? "justify-end" : "justify-start"}`}
             >
               {m.from === "senior" && (
-                <div className="w-8 h-8 rounded-full bg-kku/10 grid place-items-center text-sm mr-2 shrink-0">
-                  🧑‍🎓
+                <div className="w-8 h-8 rounded-full bg-kku/10 flex items-center justify-center text-sm mr-2 shrink-0">
+                  <User className="w-4 h-4 text-kku" />
                 </div>
               )}
               <div
@@ -107,10 +108,10 @@ export default function SupportPage() {
           />
           <button
             onClick={() => send(text)}
-            className="w-10 h-10 rounded-full bg-kku text-white grid place-items-center shrink-0"
+            className="w-10 h-10 rounded-full bg-kku text-white flex items-center justify-center shrink-0"
             aria-label="ส่ง"
           >
-            ➤
+            <Send className="w-4 h-4" />
           </button>
         </div>
       </div>

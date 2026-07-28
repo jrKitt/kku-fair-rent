@@ -3,7 +3,9 @@
 @tailwind utilities;
 
 :root {
-  --kku: #8a1538;
+  --kku: #A73B24;
+  --kku-dark: #7d2c1b;
+  --kku-light: #c4624e;
 }
 
 html,

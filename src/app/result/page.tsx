@@ -2,11 +2,16 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Trophy, MapPin, ShieldCheck, CheckCircle2, AlertTriangle, HelpCircle, CreditCard } from "lucide-react";
 import PhoneShell from "@/components/PhoneShell";
 import { matchDorms } from "@/lib/match";
 import type { MatchResult, QuizAnswers } from "@/lib/types";
 
-const MEDALS = ["🥇", "🥈", "🥉"];
+const RANK_ICONS = [
+  <Trophy key="1" className="w-5 h-5 text-amber-500" />,
+  <Trophy key="2" className="w-5 h-5 text-gray-400" />,
+  <Trophy key="3" className="w-5 h-5 text-orange-600" />,
+];
 
 export default function ResultPage() {
   const [results, setResults] = useState<MatchResult[] | null>(null);
@@ -35,7 +40,9 @@ export default function ResultPage() {
     return (
       <PhoneShell title="ผลการจับคู่" back="/quiz">
         <div className="p-8 text-center">
-          <div className="text-4xl mb-3">🤔</div>
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
+            <HelpCircle className="w-8 h-8 text-gray-400" />
+          </div>
           <p className="text-gray-500 text-sm mb-4">
             ยังไม่มีคำตอบแบบทดสอบ ลองทำ Smart Quiz ก่อนนะ
           </p>
@@ -50,9 +57,12 @@ export default function ResultPage() {
   return (
     <PhoneShell title="ผลการจับคู่หอที่ใช่" subtitle="3 อันดับที่ยังมีห้องว่างจริง" back="/quiz">
       <div className="p-4 space-y-4">
-        <div className="rounded-xl bg-kku/5 border border-kku/15 p-3 text-xs text-kku-dark leading-relaxed">
-          🎯 ประมวลผลจากงบ {answers?.monthlyBudget.toLocaleString()} บาท/เดือน · คณะ
-          {answers?.faculty} · เดินทาง ≤ {answers?.maxTravel} นาที
+        <div className="rounded-xl bg-kku/5 border border-kku/15 p-3 text-xs text-kku-dark leading-relaxed flex gap-2">
+          <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />
+          <span>
+            ประมวลผลจากงบ {answers?.monthlyBudget.toLocaleString()} บาท/เดือน · คณะ
+            {answers?.faculty} · เดินทาง ≤ {answers?.maxTravel} นาที
+          </span>
         </div>
 
         {results.map((r, i) => (
@@ -80,14 +90,18 @@ function ResultCard({ r, rank, loan }: { r: MatchResult; rank: number; loan: boo
           {d.image}
         </div>
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-1.5">
-            <span className="text-lg">{MEDALS[rank]}</span>
+          <div className="flex items-center gap-2">
+            {RANK_ICONS[rank]}
             <span className="font-bold text-gray-800 truncate">{d.name}</span>
           </div>
-          <div className="flex items-center gap-2 text-xs text-gray-400">
-            <span>📍 โซน{d.zone}</span>
+          <div className="flex items-center gap-2 text-xs text-gray-400 mt-0.5">
+            <MapPin className="w-3 h-3" />
+            <span>โซน{d.zone}</span>
             {d.verified && (
-              <span className="text-line font-semibold">✓ Verified</span>
+              <span className="flex items-center gap-1 text-emerald-600 font-semibold">
+                <ShieldCheck className="w-3 h-3" />
+                Verified
+              </span>
             )}
           </div>
         </div>
@@ -123,11 +137,12 @@ function ResultCard({ r, rank, loan }: { r: MatchResult; rank: number; loan: boo
 
       {/* highlights */}
       <div className="px-4 pb-3">
-        <p className="text-xs font-semibold text-gray-500 mb-1">จุดเด่น</p>
+        <p className="text-xs font-semibold text-gray-500 mb-1.5">จุดเด่น</p>
         <div className="flex flex-wrap gap-1.5">
           {r.reasons.map((x, i) => (
-            <span key={i} className="text-[11px] bg-green-50 text-green-700 px-2 py-1 rounded-full">
-              ✓ {x}
+            <span key={i} className="text-[11px] bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-full flex items-center gap-1">
+              <CheckCircle2 className="w-3 h-3" />
+              {x}
             </span>
           ))}
         </div>
@@ -136,11 +151,12 @@ function ResultCard({ r, rank, loan }: { r: MatchResult; rank: number; loan: boo
       {/* warnings */}
       {r.warnings.length > 0 && (
         <div className="px-4 pb-3">
-          <p className="text-xs font-semibold text-gray-500 mb-1">ข้อควรระวัง</p>
-          <div className="space-y-1">
+          <p className="text-xs font-semibold text-gray-500 mb-1.5">ข้อควรระวัง</p>
+          <div className="space-y-1.5">
             {r.warnings.map((x, i) => (
-              <div key={i} className="text-[11px] text-amber-700 bg-amber-50 px-2 py-1.5 rounded-lg">
-                ⚠️ {x}
+              <div key={i} className="text-[11px] text-amber-700 bg-amber-50 px-2.5 py-1.5 rounded-lg flex items-start gap-1.5">
+                <AlertTriangle className="w-3 h-3 shrink-0 mt-0.5" />
+                <span>{x}</span>
               </div>
             ))}
           </div>
@@ -151,9 +167,10 @@ function ResultCard({ r, rank, loan }: { r: MatchResult; rank: number; loan: boo
       {r.overDeposit > 0 && loan && (
         <Link
           href="/loan"
-          className="block bg-kku/5 border-t border-kku/10 px-4 py-3 text-center text-sm font-semibold text-kku"
+          className="flex items-center justify-center gap-2 bg-kku/5 border-t border-kku/10 px-4 py-3 text-sm font-semibold text-kku"
         >
-          💳 ค่าแรกเข้าเกินงบ {r.overDeposit.toLocaleString()} บาท — คลิกขอสิทธิ์ผ่อนมัดจำ
+          <CreditCard className="w-4 h-4" />
+          ค่าแรกเข้าเกินงบ {r.overDeposit.toLocaleString()} บาท — คลิกขอสิทธิ์ผ่อนมัดจำ
         </Link>
       )}
     </div>

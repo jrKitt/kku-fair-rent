@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { AlertCircle, CheckCircle2, XCircle, Info } from "lucide-react";
 import PhoneShell from "@/components/PhoneShell";
 
 // นโยบายที่ 2: Data-Driven Deposit Loan
@@ -70,10 +71,13 @@ export default function LoanPage() {
   return (
     <PhoneShell title="ขอทุนมัดจำฉุกเฉิน" subtitle="Data-Driven Deposit Loan · กองทุน มข." back="/">
       <div className="p-4 space-y-4 pb-10">
-        <div className="rounded-xl bg-kku/5 border border-kku/15 p-3 text-xs text-kku-dark leading-relaxed">
-          🆘 ระบบนี้เป็น <b>เครื่องมือคัดกรอง</b> เชื่อมต่อ “กองทุนเงินยืมฉุกเฉิน
-          กองพัฒนานักศึกษา มข.” — มหาวิทยาลัยไม่ต้องตั้งกองทุนใหม่ เงินมัดจำโอนตรงเข้าหอ Verified
-          และผ่อนคืนผ่าน Smart Billing
+        <div className="rounded-xl bg-kku/5 border border-kku/15 p-3 text-xs text-kku-dark leading-relaxed flex gap-2">
+          <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+          <span>
+            ระบบนี้เป็น <b>เครื่องมือคัดกรอง</b> เชื่อมต่อ "กองทุนเงินยืมฉุกเฉิน
+            กองพัฒนานักศึกษา มข." — มหาวิทยาลัยไม่ต้องตั้งกองทุนใหม่ เงินมัดจำโอนตรงเข้าหอ Verified
+            และผ่อนคืนผ่าน Smart Billing
+          </span>
         </div>
 
         {!submitted ? (
@@ -94,7 +98,8 @@ export default function LoanPage() {
             <Field label="หอที่เลือกได้ตรา Verified ไหม?">
               <div className="grid grid-cols-2 gap-2">
                 <Toggle active={f.dormVerified} onClick={() => set("dormVerified", true)}>
-                  ✓ Verified
+                  <CheckCircle2 className="w-4 h-4 inline-block mr-1" />
+                  Verified
                 </Toggle>
                 <Toggle active={!f.dormVerified} onClick={() => set("dormVerified", false)}>
                   ยังไม่ Verified
@@ -161,11 +166,19 @@ function Result({
     <div className="space-y-4">
       <div
         className={`rounded-2xl p-5 text-center ${
-          approved ? "bg-line/10 border border-line/30" : "bg-amber-50 border border-amber-200"
+          approved ? "bg-emerald-50 border border-emerald-200" : "bg-amber-50 border border-amber-200"
         }`}
       >
-        <div className="text-4xl mb-2">{approved ? "✅" : "⚠️"}</div>
-        <div className={`font-bold text-lg ${approved ? "text-line-dark" : "text-amber-700"}`}>
+        <div className={`w-14 h-14 mx-auto mb-3 rounded-full flex items-center justify-center ${
+          approved ? "bg-emerald-500" : "bg-amber-500"
+        }`}>
+          {approved ? (
+            <CheckCircle2 className="w-8 h-8 text-white" />
+          ) : (
+            <AlertCircle className="w-8 h-8 text-white" />
+          )}
+        </div>
+        <div className={`font-bold text-lg ${approved ? "text-emerald-900" : "text-amber-700"}`}>
           {approved ? "ผ่านเกณฑ์คัดกรองเบื้องต้น" : "ยังไม่ผ่านเกณฑ์บางข้อ"}
         </div>
         <p className="text-xs text-gray-500 mt-1">
@@ -177,11 +190,17 @@ function Result({
 
       <div className="space-y-2">
         {checks.map((c, i) => (
-          <div key={i} className="flex gap-2 bg-white border border-gray-100 rounded-xl p-3">
-            <span className="text-lg">{c.ok ? "✅" : "❌"}</span>
+          <div key={i} className="flex gap-2.5 bg-white border border-gray-100 rounded-xl p-3">
+            <div className="w-5 h-5 shrink-0">
+              {c.ok ? (
+                <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+              ) : (
+                <XCircle className="w-5 h-5 text-red-500" />
+              )}
+            </div>
             <div>
               <div className="text-sm font-medium text-gray-800">{c.label}</div>
-              <div className="text-[11px] text-gray-400">{c.why}</div>
+              <div className="text-[11px] text-gray-400 mt-0.5">{c.why}</div>
             </div>
           </div>
         ))}
@@ -193,9 +212,12 @@ function Result({
           <Row label="วงเงินที่อนุมัติ" value={`${shortfall.toLocaleString()} บาท`} strong />
           <Row label="จำนวนงวด" value={`${installments} งวด`} />
           <Row label="ผ่อน/เดือน (ใน Smart Billing)" value={`${perInstallment.toLocaleString()} บาท`} />
-          <div className="mt-3 text-[11px] text-gray-500 leading-relaxed border-t border-kku/10 pt-2">
-            🔒 เงินโอนตรงจากกองทุนไปบัญชีหอ Verified · ติดตามการชำระเรียลไทม์ ·
-            ควบคุมความเสี่ยงหนี้สูญ 100%
+          <div className="mt-3 text-[11px] text-gray-500 leading-relaxed border-t border-kku/10 pt-2 flex gap-2">
+            <Info className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+            <span>
+              เงินโอนตรงจากกองทุนไปบัญชีหอ Verified · ติดตามการชำระเรียลไทม์ ·
+              ควบคุมความเสี่ยงหนี้สูญ 100%
+            </span>
           </div>
         </div>
       )}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Calculator, FileText, CheckSquare, Camera, HelpCircle, ChevronDown, AlertTriangle, CheckCircle2 } from "lucide-react";
 import PhoneShell from "@/components/PhoneShell";
 import { FAIR_ELECTRIC_RATE, FAIR_WATER_RATE } from "@/lib/billing";
 
@@ -32,16 +33,22 @@ export default function KnowledgePage() {
         <UtilityCalculator />
 
         <section>
-          <h3 className="font-bold text-gray-800 mb-2 text-sm">📄 เอกสารมาตรฐาน</h3>
+          <h3 className="font-bold text-gray-800 mb-2 text-sm flex items-center gap-2">
+            <FileText className="w-4 h-4 text-kku" />
+            เอกสารมาตรฐาน
+          </h3>
           <div className="space-y-2">
-            <DocRow icon="📝" title="สัญญาเช่าหอพักมาตรฐาน (เป็นธรรม)" note="อ้างอิงประกาศ สคบ." />
-            <DocRow icon="✅" title="เช็กลิสต์ก่อนเซ็นสัญญา 10 ข้อ" note="กันหมกเม็ดค่าปรับ" />
-            <DocRow icon="📸" title="แบบฟอร์มบันทึกสภาพห้อง (วันเข้าอยู่)" note="กันโดนหักมัดจำ" />
+            <DocRow icon={FileText} title="สัญญาเช่าหอพักมาตรฐาน (เป็นธรรม)" note="อ้างอิงประกาศ สคบ." />
+            <DocRow icon={CheckSquare} title="เช็กลิสต์ก่อนเซ็นสัญญา 10 ข้อ" note="กันหมกเม็ดค่าปรับ" />
+            <DocRow icon={Camera} title="แบบฟอร์มบันทึกสภาพห้อง (วันเข้าอยู่)" note="กันโดนหักมัดจำ" />
           </div>
         </section>
 
         <section>
-          <h3 className="font-bold text-gray-800 mb-2 text-sm">❓ คำถามที่พบบ่อย (FAQ)</h3>
+          <h3 className="font-bold text-gray-800 mb-2 text-sm flex items-center gap-2">
+            <HelpCircle className="w-4 h-4 text-kku" />
+            คำถามที่พบบ่อย (FAQ)
+          </h3>
           <div className="space-y-2">
             {FAQS.map((f, i) => (
               <FaqItem key={i} q={f.q} a={f.a} />
@@ -62,7 +69,10 @@ function UtilityCalculator() {
 
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-4">
-      <h3 className="font-bold text-gray-800 text-sm mb-1">🧮 คำนวณค่าไฟตามจริง</h3>
+      <h3 className="font-bold text-gray-800 text-sm mb-1 flex items-center gap-2">
+        <Calculator className="w-4 h-4 text-kku" />
+        คำนวณค่าไฟตามจริง
+      </h3>
       <p className="text-[11px] text-gray-400 mb-3">
         เทียบอัตราที่หอเก็บ กับอัตราการไฟฟ้าจริง ({FAIR_ELECTRIC_RATE} บาท/หน่วย)
       </p>
@@ -86,25 +96,35 @@ function UtilityCalculator() {
       <div className="mt-3 space-y-1 text-sm">
         <div className="flex justify-between">
           <span className="text-gray-500">ควรจ่ายจริง</span>
-          <span className="font-medium text-line-dark">{fair.toLocaleString()} บาท</span>
+          <span className="font-medium text-emerald-700">{fair.toLocaleString()} บาท</span>
         </div>
         <div className="flex justify-between">
           <span className="text-gray-500">หอเรียกเก็บ</span>
           <span className="font-medium text-gray-800">{charged.toLocaleString()} บาท</span>
         </div>
         <div
-          className={`flex justify-between font-bold ${
-            overcharge > 0 ? "text-red-600" : "text-line-dark"
+          className={`flex justify-between items-center font-bold ${
+            overcharge > 0 ? "text-red-600" : "text-emerald-700"
           }`}
         >
-          <span>{overcharge > 0 ? "จ่ายเกินจริง" : "เป็นธรรม"}</span>
+          <span className="flex items-center gap-1">
+            {overcharge > 0 ? (
+              <AlertTriangle className="w-4 h-4" />
+            ) : (
+              <CheckCircle2 className="w-4 h-4" />
+            )}
+            {overcharge > 0 ? "จ่ายเกินจริง" : "เป็นธรรม"}
+          </span>
           <span>{overcharge > 0 ? `+${overcharge.toLocaleString()} บาท/เดือน` : "✓"}</span>
         </div>
       </div>
       {overcharge > 0 && (
-        <p className="mt-2 text-[11px] text-red-500">
-          ⚠️ ปีละ ~{(overcharge * 12).toLocaleString()} บาท — พิจารณาแจ้งผ่านเมนูร้องเรียน
-        </p>
+        <div className="mt-2 text-[11px] text-red-600 flex items-start gap-1.5">
+          <AlertTriangle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+          <span>
+            ปีละ ~{(overcharge * 12).toLocaleString()} บาท — พิจารณาแจ้งผ่านเมนูร้องเรียน
+          </span>
+        </div>
       )}
       <p className="mt-2 text-[10px] text-gray-400">
         น้ำประปาอ้างอิง ~{FAIR_WATER_RATE} บาท/หน่วย (แล้วแต่พื้นที่)
@@ -113,15 +133,17 @@ function UtilityCalculator() {
   );
 }
 
-function DocRow({ icon, title, note }: { icon: string; title: string; note: string }) {
+function DocRow({ icon: Icon, title, note }: { icon: React.ComponentType<{ className?: string }>; title: string; note: string }) {
   return (
     <button className="w-full flex items-center gap-3 bg-white border border-gray-100 rounded-xl p-3 text-left active:bg-gray-50">
-      <span className="text-xl">{icon}</span>
+      <div className="w-9 h-9 rounded-lg bg-kku/5 flex items-center justify-center shrink-0">
+        <Icon className="w-5 h-5 text-kku" />
+      </div>
       <div className="flex-1">
         <div className="text-sm font-medium text-gray-800">{title}</div>
         <div className="text-[11px] text-gray-400">{note}</div>
       </div>
-      <span className="text-gray-300">›</span>
+      <ChevronDown className="w-5 h-5 text-gray-300 -rotate-90" />
     </button>
   );
 }
@@ -135,7 +157,7 @@ function FaqItem({ q, a }: { q: string; a: string }) {
         className="w-full flex items-center justify-between gap-2 p-3 text-left"
       >
         <span className="text-sm font-medium text-gray-800">{q}</span>
-        <span className={`text-gray-400 transition-transform ${open ? "rotate-180" : ""}`}>⌄</span>
+        <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform shrink-0 ${open ? "rotate-180" : ""}`} />
       </button>
       {open && <p className="px-3 pb-3 text-xs text-gray-500 leading-relaxed">{a}</p>}
     </div>

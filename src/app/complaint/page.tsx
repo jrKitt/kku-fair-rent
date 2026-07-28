@@ -1,18 +1,19 @@
 "use client";
 
 import { useState } from "react";
+import { Zap, FileText, Camera, DollarSign, AlertTriangle, PenLine, CheckCircle2, AlertCircle, Paperclip } from "lucide-react";
 import PhoneShell from "@/components/PhoneShell";
 import { DORMS } from "@/lib/dorms";
 
 // ปุ่ม 6: ร้องเรียน / แจ้งปัญหาไม่ตรงปก
 
 const CATEGORIES = [
-  { key: "electric", label: "คิดค่าไฟเกินจริง", icon: "⚡" },
-  { key: "contract", label: "สัญญาไม่เป็นธรรม / หมกเม็ด", icon: "📄" },
-  { key: "notmatch", label: "ห้องจริงไม่ตรงปก", icon: "📸" },
-  { key: "deposit", label: "ยึดเงินมัดจำไม่คืน", icon: "💸" },
-  { key: "safety", label: "ความปลอดภัย / สภาพแวดล้อม", icon: "🚨" },
-  { key: "other", label: "อื่นๆ", icon: "✏️" },
+  { key: "electric", label: "คิดค่าไฟเกินจริง", icon: Zap },
+  { key: "contract", label: "สัญญาไม่เป็นธรรม / หมกเม็ด", icon: FileText },
+  { key: "notmatch", label: "ห้องจริงไม่ตรงปก", icon: Camera },
+  { key: "deposit", label: "ยึดเงินมัดจำไม่คืน", icon: DollarSign },
+  { key: "safety", label: "ความปลอดภัย / สภาพแวดล้อม", icon: AlertTriangle },
+  { key: "other", label: "อื่นๆ", icon: PenLine },
 ];
 
 export default function ComplaintPage() {
@@ -28,7 +29,9 @@ export default function ComplaintPage() {
     return (
       <PhoneShell title="แจ้งเรื่องสำเร็จ" back="/">
         <div className="p-8 text-center">
-          <div className="text-5xl mb-4">✅</div>
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-emerald-100 flex items-center justify-center">
+            <CheckCircle2 className="w-9 h-9 text-emerald-600" />
+          </div>
           <h2 className="font-bold text-lg text-gray-800 mb-2">รับเรื่องแล้ว</h2>
           <p className="text-sm text-gray-500 leading-relaxed mb-4">
             เลขที่เรื่อง <b className="text-kku">#KKU-{Math.floor(Math.random() * 90000 + 10000)}</b>
@@ -36,9 +39,12 @@ export default function ComplaintPage() {
             ทีมงาน KKU Fair-Rent จะตรวจสอบภายใน 3 วันทำการ
             {anon && " โดยไม่เปิดเผยตัวตนผู้แจ้ง"}
           </p>
-          <div className="rounded-xl bg-amber-50 border border-amber-200 p-3 text-xs text-amber-800 text-left leading-relaxed">
-            หากเป็นหอในระบบที่ได้ตรา Verified และพบว่าทำผิดจริง อาจถูกระงับตรา
-            และนำออกจากการโปรโมตหน้าแรก LINE OA
+          <div className="rounded-xl bg-amber-50 border border-amber-200 p-3 text-xs text-amber-800 text-left leading-relaxed flex gap-2">
+            <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+            <span>
+              หากเป็นหอในระบบที่ได้ตรา Verified และพบว่าทำผิดจริง อาจถูกระงับตรา
+              และนำออกจากการโปรโมตหน้าแรก LINE OA
+            </span>
           </div>
           <button
             onClick={() => {
@@ -59,8 +65,11 @@ export default function ComplaintPage() {
   return (
     <PhoneShell title="ร้องเรียน / แจ้งไม่ตรงปก" subtitle="แจ้งเบาะแสหอเอาเปรียบ" back="/">
       <div className="p-4 space-y-5 pb-8">
-        <div className="rounded-xl bg-red-50 border border-red-200 p-3 text-xs text-red-700 leading-relaxed">
-          🚨 ช่องทางนี้ช่วยคัดกรองหอที่เอาเปรียบออกจากระบบ ข้อมูลของคุณช่วยรุ่นน้องปีต่อไปได้
+        <div className="rounded-xl bg-red-50 border border-red-200 p-3 text-xs text-red-700 leading-relaxed flex gap-2">
+          <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+          <span>
+            ช่องทางนี้ช่วยคัดกรองหอที่เอาเปรียบออกจากระบบ ข้อมูลของคุณช่วยรุ่นน้องปีต่อไปได้
+          </span>
         </div>
 
         <div>
@@ -82,20 +91,23 @@ export default function ComplaintPage() {
         <div>
           <p className="text-sm font-medium text-gray-700 mb-2">ประเภทปัญหา</p>
           <div className="grid grid-cols-2 gap-2">
-            {CATEGORIES.map((c) => (
-              <button
-                key={c.key}
-                onClick={() => setCat(c.key)}
-                className={`text-left px-3 py-3 rounded-xl border text-sm font-medium transition-colors ${
-                  cat === c.key
-                    ? "bg-kku text-white border-kku"
-                    : "bg-white text-gray-700 border-gray-200"
-                }`}
-              >
-                <span className="mr-1">{c.icon}</span>
-                {c.label}
-              </button>
-            ))}
+            {CATEGORIES.map((c) => {
+              const Icon = c.icon;
+              return (
+                <button
+                  key={c.key}
+                  onClick={() => setCat(c.key)}
+                  className={`text-left px-3 py-3 rounded-xl border text-sm font-medium transition-colors flex items-center gap-2 ${
+                    cat === c.key
+                      ? "bg-kku text-white border-kku"
+                      : "bg-white text-gray-700 border-gray-200"
+                  }`}
+                >
+                  <Icon className="w-4 h-4 shrink-0" />
+                  <span className="text-xs leading-tight">{c.label}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -108,8 +120,9 @@ export default function ComplaintPage() {
             placeholder="เล่าเหตุการณ์ เช่น คิดค่าไฟหน่วยละ 8 บาท ทั้งที่การไฟฟ้าเก็บ 4.2 บาท…"
             className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm outline-none focus:border-kku resize-none"
           />
-          <button className="mt-2 text-xs text-gray-400 border border-dashed border-gray-300 rounded-lg px-3 py-2 w-full">
-            📎 แนบรูปบิล / สัญญา / ภาพห้อง (ไม่บังคับ)
+          <button className="mt-2 text-xs text-gray-400 border border-dashed border-gray-300 rounded-lg px-3 py-2 w-full flex items-center justify-center gap-2">
+            <Paperclip className="w-4 h-4" />
+            แนบรูปบิล / สัญญา / ภาพห้อง (ไม่บังคับ)
           </button>
         </div>
 
@@ -126,9 +139,10 @@ export default function ComplaintPage() {
         <button
           onClick={() => setSent(true)}
           disabled={!canSend}
-          className="w-full py-3.5 rounded-xl bg-kku text-white font-bold text-sm disabled:opacity-40"
+          className="w-full py-3.5 rounded-xl bg-kku text-white font-bold text-sm disabled:opacity-40 flex items-center justify-center gap-2"
         >
-          🚨 ส่งเรื่องร้องเรียน
+          <AlertTriangle className="w-5 h-5" />
+          ส่งเรื่องร้องเรียน
         </button>
       </div>
     </PhoneShell>

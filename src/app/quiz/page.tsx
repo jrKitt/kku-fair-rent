@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Wallet, FootprintsIcon as Walk, Bike, Bus, Car, Info, Target } from "lucide-react";
 import PhoneShell from "@/components/PhoneShell";
 import { FACULTIES } from "@/lib/faculties";
 import { AMENITY_LABELS } from "@/lib/match";
@@ -17,11 +18,11 @@ const DEPOSIT_OPTIONS = [
   { key: ">10000", label: "มากกว่า 10,000" },
 ];
 
-const TRANSPORTS: { key: Transport; label: string; icon: string }[] = [
-  { key: "walk", label: "เดิน", icon: "🚶" },
-  { key: "motorcycle", label: "มอเตอร์ไซค์", icon: "🛵" },
-  { key: "songthaew", label: "รถสองแถว", icon: "🚐" },
-  { key: "other", label: "อื่นๆ", icon: "🚗" },
+const TRANSPORTS: { key: Transport; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
+  { key: "walk", label: "เดิน", icon: Walk },
+  { key: "motorcycle", label: "มอเตอร์ไซค์", icon: Bike },
+  { key: "songthaew", label: "รถสองแถว", icon: Bus },
+  { key: "other", label: "อื่นๆ", icon: Car },
 ];
 
 const AMENITY_CHOICES = ["wifi", "washer", "parking", "lift", "aircon", "gym", "keycard"];
@@ -168,16 +169,19 @@ export default function QuizPage() {
 
             <Label className="mt-5">เดินทางหลักด้วยวิธีไหน?</Label>
             <div className="grid grid-cols-2 gap-2">
-              {TRANSPORTS.map((t) => (
-                <Choice
-                  key={t.key}
-                  active={a.transport === t.key}
-                  onClick={() => set("transport", t.key)}
-                >
-                  <span className="mr-1">{t.icon}</span>
-                  {t.label}
-                </Choice>
-              ))}
+              {TRANSPORTS.map((t) => {
+                const Icon = t.icon;
+                return (
+                  <Choice
+                    key={t.key}
+                    active={a.transport === t.key}
+                    onClick={() => set("transport", t.key)}
+                  >
+                    <Icon className="w-4 h-4 inline-block mr-1.5" />
+                    {t.label}
+                  </Choice>
+                );
+              })}
             </div>
 
             <Label className="mt-5">
@@ -280,9 +284,9 @@ export default function QuizPage() {
                 </Choice>
               ))}
             </div>
-            <div className="mt-4 rounded-xl bg-blue-50 border border-blue-200 p-3 text-xs text-blue-800 leading-relaxed">
-              💡 สัญญาสั้น (รายเดือน) ยืดหยุ่นแต่หอส่วนใหญ่คิดค่าเช่าสูงกว่า ส่วนสัญญา 1 ปี
-              มักได้ราคาดีกว่าและมีสิทธิ์ผ่อนมัดจำ
+            <div className="mt-4 rounded-xl bg-blue-50 border border-blue-200 p-3 text-xs text-blue-800 leading-relaxed flex gap-2">
+              <Info className="w-4 h-4 shrink-0 mt-0.5" />
+              <span>สัญญาสั้น (รายเดือน) ยืดหยุ่นแต่หอส่วนใหญ่คิดค่าเช่าสูงกว่า ส่วนสัญญา 1 ปี มักได้ราคาดีกว่าและมีสิทธิ์ผ่อนมัดจำ</span>
             </div>
           </Section>
         )}
@@ -319,9 +323,16 @@ export default function QuizPage() {
         <button
           onClick={next}
           disabled={!canNext}
-          className="flex-1 py-3 rounded-xl bg-kku text-white font-bold text-sm disabled:opacity-40"
+          className="flex-1 py-3 rounded-xl bg-kku text-white font-bold text-sm disabled:opacity-40 flex items-center justify-center gap-2"
         >
-          {step === TOTAL ? "🎯 ประมวลผลหาหอที่ใช่" : "ถัดไป"}
+          {step === TOTAL ? (
+            <>
+              <Target className="w-4 h-4" />
+              ประมวลผลหาหอที่ใช่
+            </>
+          ) : (
+            "ถัดไป"
+          )}
         </button>
       </div>
     </PhoneShell>
