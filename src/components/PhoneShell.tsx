@@ -17,8 +17,8 @@ export function PhoneShell({
 }) {
   const router = useRouter();
   return (
-    <div className="min-h-screen w-full bg-gradient-to-b from-kku-dark to-kku flex items-center justify-center p-0 sm:p-6">
-      <div className="relative w-full max-w-[430px] bg-gray-50 min-h-screen sm:min-h-[860px] sm:rounded-[2.2rem] sm:shadow-2xl overflow-hidden flex flex-col sm:border-[10px] sm:border-black">
+    <div className="min-h-screen w-full bg-white">
+      <div className="relative w-full max-w-[430px] mx-auto bg-white min-h-screen overflow-hidden flex flex-col border-x border-gray-100">
         {/* status bar / OA header */}
         <header className="bg-kku text-white shrink-0">
           <div className="flex items-center gap-2 px-4 h-14">
